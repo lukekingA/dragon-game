@@ -22,9 +22,15 @@ export default new Vuex.Store({
     dragons: [],
     champion: {},
     dragon: {},
-    currentGame: {}
+    currentGame: {},
+    winGame: false
   },
   mutations: {
+    newState(state, data) {
+      for (let key in state) {
+        state[key] = data[key]
+      }
+    },
     setChampions(state, data) {
       state.champions = data
     },
@@ -39,6 +45,9 @@ export default new Vuex.Store({
     },
     setGame(state, data) {
       state.currentGame = data
+    },
+    setWin(state, data) {
+      state.winGame = data
     }
   },
   actions: {
@@ -96,9 +105,9 @@ export default new Vuex.Store({
         commit('setGame', res.data)
         commit('setChampion', res.data._champion)
         commit('setDragon', res.data._dragon)
-        debugger
         if (res.data._dragon.currentHP <= 0 || res.data._champion.hp <= 0) {
           console.log('game over')
+          dispatch('setWin', true)
         }
       })
     },
@@ -109,6 +118,41 @@ export default new Vuex.Store({
       _api.put('/games/' + data.gameId, data.attack).then(res => {
         dispatch('getApiGame', res.data._id)
       })
+    },
+    setWin({
+      commit,
+      dispatch
+    }, val) {
+      commit('setWin', val)
+    },
+    newGame({
+      commit,
+      dispatch,
+      state
+    }) {
+      router.push({
+        name: 'NewGame'
+      })
+      _api.delete('/game' + state.currentGame._id).then(res => {
+
+      })
+      commit('newState', {
+        champions: [],
+        dragons: [],
+        champion: {},
+        dragon: {},
+        currentGame: {},
+        winGame: false
+      })
+    },
+    playAgain({
+      commit,
+      dispatch,
+      state
+    }) {
+      dispatch('newGame')
+      commit('setChampion', state.champion)
+      commit('setDragon', {})
     }
   }
 })
