@@ -1,6 +1,6 @@
 <template>
   <div class="champion">
-    <div class="card" @click="setChampion(champion.id)">
+    <div :class="{'border-success' : getChampion.name == champion.name}" class="card border" @click="setChampion(champion.id)">
       <img class="card-img-top" :src="champion.imgUrl">
       <div class="card-body">
         <h4 class="card-title">{{champion.name}}</h4>
@@ -22,7 +22,11 @@
       return {}
     },
     props: ['champion'],
-    computed: {},
+    computed: {
+      getChampion() {
+        return this.$store.state.champion
+      }
+    },
     methods: {
       setChampion(id) {
         this.$store.dispatch('setApiChampion', id)
