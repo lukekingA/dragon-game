@@ -1,13 +1,15 @@
 <template>
   <div class="champion">
-    <li>
-      <div class="card" @click="setChampion(champion.id)">
-        <img class="card-img-top" :src="champion.imgUrl">
-        <div class="card-body">
-          <h4 class="card-title">{{champion.name}}</h4>
+    <div class="card" @click="setChampion(champion.id)">
+      <img class="card-img-top" :src="champion.imgUrl">
+      <div class="card-body">
+        <h4 class="card-title">{{champion.name}}</h4>
+        <div class="d-flex flex-column">
+          <span>Class: {{champion.class}}</span>
+          <span>Race: {{champion.race}}</span>
         </div>
       </div>
-    </li>
+    </div>
   </div>
 </template>
 
@@ -20,7 +22,11 @@
     },
     props: ['champion'],
     computed: {},
-    methods: {},
+    methods: {
+      setChampion(id) {
+        this.$store.dispatch('setApiChampion', id)
+      }
+    },
     components: {}
   }
 </script>

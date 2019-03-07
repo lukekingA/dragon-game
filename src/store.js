@@ -19,7 +19,7 @@ export default new Vuex.Store({
     dragons: [],
     champion: {},
     dragon: {},
-    CurrentGame: {}
+    currentGame: {}
   },
   mutations: {
     setChampions(state, data) {
@@ -33,6 +33,9 @@ export default new Vuex.Store({
     },
     setDragon(state, data) {
       state.dragon = data
+    },
+    setGame(state, data) {
+      state.currentGame = data
     }
 
   },
@@ -57,7 +60,7 @@ export default new Vuex.Store({
       commit,
       dispatch
     }, id) {
-      _api.get('/champions/:' + id).then(res => {
+      _api.get('/champions/' + id).then(res => {
         commit('setChampion', res.data)
       })
     },
@@ -65,8 +68,22 @@ export default new Vuex.Store({
       commit,
       dispatch
     }, id) {
-      _api.get('/dragon/:' + id).then(res => {
+      _api.get('/dragons/' + id).then(res => {
         commit('setDragon', res.data)
+      })
+    },
+    getApiGame({
+      commit,
+      dispatch
+    }, players) {
+      _api.post('/games', players).then(res => {
+        commit('setGame', res.data)
+        router.push({
+          name: 'PlayGame',
+          params: {
+            id: res.data._id
+          }
+        })
       })
     }
   }

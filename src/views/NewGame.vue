@@ -1,20 +1,24 @@
 <template>
   <div class="new-game container-fluid bg-dark">
     <div class="my-0 py-4">
-      <button class="btn btn-lg bg-light text-dark" v-if="dragon && champion">Play</button>
+      <button class="btn btn-lg bg-light text-dark" v-if="dragon.name && champion.name" @click="getGame">Play</button>
     </div>
     <div class="row">
       <div class="col-6">
         <ul class="row">
           <div class="col-6" v-for="champion in champions">
-            <champion :champion="champion"></champion>
+            <li>
+              <champion :champion="champion"></champion>
+            </li>
           </div>
         </ul>
       </div>
       <div class="col-6">
         <ul class="row">
           <div class="col-6" v-for="dragon in dragons">
-            <dragon :dragon="dragon"></dragon>
+            <li>
+              <dragon :dragon="dragon"></dragon>
+            </li>
           </div>
         </ul>
       </div>
@@ -30,11 +34,7 @@
   export default {
     name: 'new-game',
     data() {
-      return {
-        players: {},
-        dragon: false,
-        champion: false
-      }
+      return {}
     },
     mounted() {
       this.$store.dispatch('getDragons')
@@ -46,10 +46,22 @@
       },
       champions() {
         return this.$store.state.champions
+      },
+      dragon() {
+        return this.$store.state.dragon
+      },
+      champion() {
+        return this.$store.state.champion
       }
     },
     methods: {
-
+      getGame() {
+        let players = {
+          dragonId: this.dragon.id,
+          championId: this.champion.id
+        }
+        this.$store.dispatch('getApiGame', players)
+      }
     },
     components: {
       Dragon,
