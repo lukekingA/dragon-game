@@ -5,6 +5,9 @@ import router from './router.js'
 import {
   stat
 } from 'fs';
+import {
+  debug
+} from 'util';
 
 
 let _api = axios.create({
@@ -37,7 +40,6 @@ export default new Vuex.Store({
     setGame(state, data) {
       state.currentGame = data
     }
-
   },
   actions: {
     getChampions({
@@ -53,6 +55,7 @@ export default new Vuex.Store({
       dispatch
     }) {
       _api.get('/dragons').then(res => {
+        debugger
         commit('setDragons', res.data)
       })
     },
@@ -72,7 +75,7 @@ export default new Vuex.Store({
         commit('setDragon', res.data)
       })
     },
-    getApiGame({
+    makeApiGame({
       commit,
       dispatch
     }, players) {
@@ -81,9 +84,29 @@ export default new Vuex.Store({
         router.push({
           name: 'PlayGame',
           params: {
-            id: res.data._id
+            id: res.data.game._id
           }
         })
+      })
+    },
+    getApiGame({
+      commit,
+      dispatch
+    }, id) {
+      _api.get('/games/' + id).then(res => {
+        commit('setGame', res.data)
+        commit('setChampion', res.data._champion)
+        commit('setDragon', res.data._dragon)
+        // dispatch('setApiDragon', res.data._dragon.id)
+        // dispatch('setApiChampion', res.data._champion.id)
+      })
+    },
+    apiPlayGame({
+      commit,
+      dispatch
+    }, data) {
+      _api.put('/games/' + data.gameId, data.attack).then(res => {
+        dispatch('getApiGame', res.data._id)
       })
     }
   }

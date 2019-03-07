@@ -7,6 +7,7 @@
         <div class="d-flex flex-column">
           <span>Class: {{champion.class}}</span>
           <span>Race: {{champion.race}}</span>
+          <span>Health: {{champion.hp}}</span>
         </div>
       </div>
     </div>
@@ -25,6 +26,9 @@
     methods: {
       setChampion(id) {
         this.$store.dispatch('setApiChampion', id)
+      },
+      health() {
+        return this.$store.state.health
       }
     },
     components: {}

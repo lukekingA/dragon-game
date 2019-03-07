@@ -60,7 +60,7 @@
           dragonId: this.dragon.id,
           championId: this.champion.id
         }
-        this.$store.dispatch('getApiGame', players)
+        this.$store.dispatch('makeApiGame', players)
       }
     },
     components: {
