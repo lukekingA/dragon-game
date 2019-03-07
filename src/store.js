@@ -55,7 +55,6 @@ export default new Vuex.Store({
       dispatch
     }) {
       _api.get('/dragons').then(res => {
-        debugger
         commit('setDragons', res.data)
       })
     },
@@ -97,8 +96,10 @@ export default new Vuex.Store({
         commit('setGame', res.data)
         commit('setChampion', res.data._champion)
         commit('setDragon', res.data._dragon)
-        // dispatch('setApiDragon', res.data._dragon.id)
-        // dispatch('setApiChampion', res.data._champion.id)
+        debugger
+        if (res.data._dragon.currentHP <= 0 || res.data._champion.hp <= 0) {
+          console.log('game over')
+        }
       })
     },
     apiPlayGame({
